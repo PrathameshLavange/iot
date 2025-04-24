@@ -1,0 +1,26 @@
+void setup() {
+  // Set pins 7, 8, and 9 as OUTPUT
+  pinMode(7, OUTPUT);
+  pinMode(8, OUTPUT);
+  pinMode(9, OUTPUT);
+}
+
+void loop() {
+  // Turn on LED on pin 7
+  digitalWrite(7, HIGH);
+  digitalWrite(8, LOW);
+  digitalWrite(9, LOW);
+  delay(1000);  // Wait for 1 second
+
+  // Turn on LED on pin 8
+  digitalWrite(7, LOW);
+  digitalWrite(8, HIGH);
+  digitalWrite(9, LOW);
+  delay(1000);  // Wait for 1 second
+
+  // Turn on LED on pin 9
+  digitalWrite(7, LOW);
+  digitalWrite(8, LOW);
+  digitalWrite(9, HIGH);
+  delay(1000);  // Wait for 1 second
+}

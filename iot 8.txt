@@ -1,0 +1,54 @@
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);  // LCD with 16 columns and 2 rows
+
+String inputString = "";  // A string to hold incoming data
+bool inputComplete = false;
+
+void setup() {
+  Serial.begin(9600);      // Start Serial communication
+  lcd.begin(16, 2);        // Initialize the LCD
+  lcd.backlight();         // Turn on the backlight
+
+  Serial.println("Enter a number to square:");
+}
+
+void loop() {
+  // Check for user input
+  if (Serial.available()) {
+    char inChar = (char)Serial.read();
+    if (inChar == '\n' || inChar == '\r') {
+      inputComplete = true;
+    } else {
+      inputString += inChar;
+    }
+  }
+
+  if (inputComplete) {
+    int number = inputString.toInt();         // Convert input to integer
+    int squared = number * number;            // Calculate square
+
+    // Display on LCD
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Square of ");
+    lcd.print(number);
+
+    lcd.setCursor(0, 1);
+    lcd.print("is ");
+    lcd.print(squared);
+
+    // Also print to Serial Monitor
+    Serial.print("The square of ");
+    Serial.print(number);
+    Serial.print(" is ");
+    Serial.println(squared);
+
+    // Reset input
+    inputString = "";
+    inputComplete = false;
+
+    Serial.println("\nEnter another number:");
+  }
+}

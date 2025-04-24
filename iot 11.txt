@@ -1,0 +1,49 @@
+#include "DHT.h"
+
+#define DHTPIN 2        // DHT22 data pin connected to digital pin 2
+#define DHTTYPE DHT22   // Define sensor type DHT22
+
+DHT dht(DHTPIN, DHTTYPE);
+
+// Variables to track min and max temperature
+float minTempC = 1000;
+float maxTempC = -1000;
+
+void setup() {
+  Serial.begin(9600);
+  dht.begin();
+
+  Serial.println("Reading temperature data...");
+}
+
+void loop() {
+  delay(2000);  // DHT22 needs time between readings
+
+  float tempC = dht.readTemperature();  // Read temperature in Celsius
+  float tempF = dht.readTemperature(true);  // Read in Fahrenheit directly
+
+  if (isnan(tempC) || isnan(tempF)) {
+    Serial.println("Failed to read from DHT sensor!");
+    return;
+  }
+
+  // Update min and max
+  if (tempC < minTempC) minTempC = tempC;
+  if (tempC > maxTempC) maxTempC = tempC;
+
+  Serial.print("Current Temp: ");
+  Serial.print(tempC);
+  Serial.print(" °C / ");
+  Serial.print(tempF);
+  Serial.println(" °F");
+
+  Serial.print("Min Temp: ");
+  Serial.print(minTempC);
+  Serial.println(" °C");
+
+  Serial.print("Max Temp: ");
+  Serial.print(maxTempC);
+  Serial.println(" °C");
+
+  Serial.println("-----------------------------");
+}

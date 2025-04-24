@@ -1,0 +1,42 @@
+char input;  // Variable to store user input
+
+void setup() {
+  pinMode(7, OUTPUT);  // Green LED
+  pinMode(8, OUTPUT);  // Yellow LED
+  pinMode(9, OUTPUT);  // Red LED
+  Serial.begin(9600);  // Start serial communication
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    input = Serial.read();  // Read user input
+
+    // Turn off all LEDs first
+    digitalWrite(7, LOW);
+    digitalWrite(8, LOW);
+    digitalWrite(9, LOW);
+
+    if (input == 'b') {
+      // Blink green LED once (on 0.5 sec, off 0.5 sec)
+      digitalWrite(7, HIGH);
+      delay(500);
+      digitalWrite(7, LOW);
+      delay(500);
+    }
+    else if (input == 'g') {
+      digitalWrite(7, HIGH);  // Green ON
+      delay(1000);            // Stay ON for 1 second
+      digitalWrite(7, LOW);   // Then turn OFF
+    }
+    else if (input == 'Y') {
+      digitalWrite(8, HIGH);  // Yellow ON
+      delay(1000);
+      digitalWrite(8, LOW);
+    }
+    else if (input == 'r') {
+      digitalWrite(9, HIGH);  // Red ON
+      delay(1000);
+      digitalWrite(9, LOW);
+    }
+  }
+}
