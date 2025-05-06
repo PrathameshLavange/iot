@@ -1,54 +1,47 @@
-#include <Wire.h>
-#include <LiquidCrystal_I2C.h>
+#include <LiquidCrystal.h>
 
-LiquidCrystal_I2C lcd(0x27, 16, 2);  // LCD with 16 columns and 2 rows
-
-String inputString = "";  // A string to hold incoming data
-bool inputComplete = false;
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);  // RS, E, D4, D5, D6, D7
 
 void setup() {
-  Serial.begin(9600);      // Start Serial communication
-  lcd.begin(16, 2);        // Initialize the LCD
-  lcd.backlight();         // Turn on the backlight
-
-  Serial.println("Enter a number to square:");
+  Serial.begin(9600);
+  lcd.begin(16, 2);
+  lcd.print("Enter number:");
 }
 
 void loop() {
-  // Check for user input
   if (Serial.available()) {
-    char inChar = (char)Serial.read();
-    if (inChar == '\n' || inChar == '\r') {
-      inputComplete = true;
-    } else {
-      inputString += inChar;
-    }
-  }
+    int n = Serial.parseInt();
+    int s = n * n;
 
-  if (inputComplete) {
-    int number = inputString.toInt();         // Convert input to integer
-    int squared = number * number;            // Calculate square
-
-    // Display on LCD
     lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Square of ");
-    lcd.print(number);
-
+    lcd.print("Num: ");
+    lcd.print(n);
     lcd.setCursor(0, 1);
-    lcd.print("is ");
-    lcd.print(squared);
+    lcd.print("Square: ");
+    lcd.print(s);
 
-    // Also print to Serial Monitor
-    Serial.print("The square of ");
-    Serial.print(number);
-    Serial.print(" is ");
-    Serial.println(squared);
+    Serial.print("Square of ");
+    Serial.print(n);
+    Serial.print(" = ");
+    Serial.println(s);
 
-    // Reset input
-    inputString = "";
-    inputComplete = false;
-
-    Serial.println("\nEnter another number:");
+    delay(3000);
+    lcd.clear();
+    lcd.print("Enter number:");
   }
 }
+
+connection 
+LCD Pin	LCD Label	Arduino Pin	Description
+1	GND	GND	Ground
+2	VCC	5V	Power supply
+3	V0	Center pin of 10kΩ pot	Contrast control
+4	RS	D12	Register select
+5	RW	GND	Always GND (write mode)
+6	E	D11	Enable
+11	D4	D5	Data bit 4
+12	D5	D4	Data bit 5
+13	D6	D3	Data bit 6
+14	D7	D2	Data bit 7
+15	A (LED+)	5V (via 220Ω resistor optional)	Backlight power
+16	K (LED-)	GND	Backlight ground
